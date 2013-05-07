@@ -4,8 +4,10 @@ from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 
-from planit.accounts.models import UserProfile, LoginToken, generate_login_token
+from planit.accounts.models import UserProfile, LoginToken, VerificationToken, generate_login_token
 from phonenumber_field.phonenumber import to_python
+
+from planit.accounts.sms import send_verification
 
 
 def register(request):
@@ -41,6 +43,8 @@ def register(request):
         user.email = email
 
         user.save()
+
+        send_verification(user)
 
         user = auth.authenticate(phone=user.phone, password=password)
 
@@ -80,6 +84,25 @@ def token_login(request):
             user = UserProfile.objects.get(phone=login_token.phone)
         except UserProfile.DoesNotExist:
             return HttpResponseRedirect("/accounts/register/?phone=%s&next=%s" % (login_token.phone, login_token.next_url))
+
+def verify(request):
+    if request.method == 'GET':
+        token = request.GET["token"]
+
+        try:
+            verification_token = VerificationToken.objects.get(token=token)
+        except VerificationToken.DoesNotExist:
+            return HttpResponse("invalid token")
+
+        user = verification_token.user
+        user.phone_verified = True
+        user.save()
+
+        return HttpResponseRedirect("/accounts/verified/")
+
+def verified(request):
+    return HttpResponse("Verified!")
+
 
 
 def invite(request):

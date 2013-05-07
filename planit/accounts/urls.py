@@ -5,5 +5,6 @@ urlpatterns = patterns('planit.accounts.views',
     url(r'register/$', 'register'),
     url(r'login/$', 'login'),
     url(r'invite/$', 'invite'),
+    url(r'verified/$', 'verified'),
     url(r'$', 'index'),
 )

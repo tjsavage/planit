@@ -27,7 +27,7 @@ class UserProfileManager(BaseUserManager):
 
 class UserProfile(AbstractBaseUser):
     phone = PhoneNumberField(unique=True)
-    phone_confirmed = models.BooleanField(default=False)
+    phone_verified = models.BooleanField(default=False)
     name = models.CharField(max_length=255, blank=True, null=True)
     email = models.CharField(max_length=255, blank=True, null=True)
 
@@ -44,9 +44,25 @@ class LoginToken(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     next_url = models.CharField(max_length=255, blank=True, null=True)
 
-def generate_login_token(phone, next=""):
-    logger.debug("Generating token for %s" % phone)
+class VerificationToken(models.Model):
+    user = models.ForeignKey('UserProfile')
+    token = models.CharField(max_length=255)
+    date_created = models.DateTimeField(auto_now_add=True)
 
+def generate_verification_token(user):
+    sha = hashlib.sha1()
+    sha.update(settings.SECRET_KEY)
+    sha.update(str(user.phone))
+    sha.update(randomword(20))
+
+    token = sha.hexdigest()
+
+    verification_token = VerificationToken.objects.create(token=token,
+                                                        user=user)
+
+    return verification_token
+
+def generate_login_token(phone, next=""):
     sha = hashlib.sha1()
     sha.update(settings.SECRET_KEY)
     sha.update(str(to_python(phone)))
@@ -57,7 +73,6 @@ def generate_login_token(phone, next=""):
     login_token = LoginToken.objects.create(token=token, 
                                             phone=phone,
                                             next_url=next)
-    logger.debug("Phone? %s" % login_token.phone)
 
     return login_token
 
