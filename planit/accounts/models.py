@@ -18,7 +18,7 @@ class UserProfileManager(BaseUserManager):
             raise ValueError("Must have a phone number")
 
         user = self.model(
-            phone=to_python(phone)
+            phone=phone
         )
 
         user.set_password(password)

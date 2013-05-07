@@ -32,10 +32,7 @@ def register(request):
 
         if UserProfile.objects.filter(phone=phone).count():
             return HttpResponse("already created")
-        try:
-            user = UserProfile.objects.create(phone, password)
-        except ValueError:
-            return HttpResponse("invalid phone")
+        user = UserProfile.objects.create(phone, password)
         if not user:
             return HttpResponse("error")
 
@@ -44,7 +41,7 @@ def register(request):
 
         user.save()
 
-        send_verification(user)
+        #send_verification(user)
 
         user = auth.authenticate(phone=user.phone, password=password)
 

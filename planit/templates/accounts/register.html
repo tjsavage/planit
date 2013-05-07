@@ -1,8 +1,61 @@
-<form method="post">
-    {% csrf_token %}
-    Phone: <input type="text" name="phone" value="{{ phone }}"/> <br/>
-    Password: <input type="text" name="password" /> <br />
-    Name: <input type="text" name="name" /> <br />
-    <input type="hidden" name="next" value="{{ next }}" />
-    <input type="submit" value="submit" />
-</form>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>GoGroup | Meetings made easy.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="/static/flat-ui-master/css/bootstrap.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="/static/flat-ui-master/css/flat-ui.css" rel="stylesheet">
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+    <!-- Stylesheets -->
+    <link href="/static/css/index.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div id="container" class="span12">
+        <div id="registration-form" class="span4">
+            <div>
+                <h1>Sign-up</h1>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div>
+                    <input type="text" value placeholder="Full Name" value="{{ name }}" name="name">
+                    <input type="text" class="bfh-phone" data-format="+1 (ddd) ddd-dddd" value placeholder="Cell Number"name="phone" value="{{ phone }}">
+                    <input type="password" name="password" value placeholder="Password">
+                    <input type="password" value placeholder="Confirm Password">
+                    <input type="hidden" value="{{ next }}" name="next" />
+                </div>
+                <div>
+                    <input type="submit" value="Register" class="btn btn-large align-right" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Load JS here for greater good =============================-->
+    <script src="/static/flat-ui-master/js/jquery-1.8.2.min.js"></script>
+    <script src="/static/flat-ui-master/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="/static/flat-ui-master/js/jquery.dropkick-1.0.0.js"></script>
+    <script src="/static/flat-ui-master/js/custom_checkbox_and_radio.js"></script>
+    <script src="/static/flat-ui-master/js/custom_radio.js"></script>
+    <script src="/static/flat-ui-master/js/jquery.tagsinput.js"></script>
+    <script src="/static/flat-ui-master/js/bootstrap-tooltip.js"></script>
+    <script src="/static/flat-ui-master/js/jquery.placeholder.js"></script>
+    <script src="/static/flat-ui-master/js/application.js"></script>
+    <!--[if lt IE 8]>
+      <script src="js/icon-font-ie7.js"></script>
+      <script src="js/icon-font-ie7-24.js"></script>
+    <![endif]-->
+</body>
+</html>

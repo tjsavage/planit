@@ -1,14 +1,22 @@
 # Django settings for planit project.
 import os, sys
+from datetime import time, datetime, timedelta
 
 AUTH_USER_MODEL = 'accounts.UserProfile'
+BASE_DIR = os.path.dirname(__file__)
 
 PHONENUMER_DEFAULT_REGION = "US"
+TIME_FORMAT = '%I:%M%p'
+START_TIME = datetime.strptime("8:00AM", TIME_FORMAT)
+END_TIME = datetime.strptime("11:59PM", TIME_FORMAT)
+INTERVAL = timedelta(minutes=30)
 #(sic)
 
 TWILIO_ACCOUNT_SID = 'AC1b2a5605d7e7054a9448c63d932a9c57'
 TWILIO_AUTH_TOKEN = '760dc9c4f20e863f8c456536f4ff922a'
 TWILIO_PHONE_NUMBER = "15005550006"
+
+DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -77,6 +85,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(os.path.dirname(__file__), 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -133,7 +142,7 @@ INSTALLED_APPS = (
     'south',
 
     'planit.accounts',
-#    'planit.scheduling',
+    'planit.scheduling',
 )
 
 # A sample logging configuration. The only tangible logging
