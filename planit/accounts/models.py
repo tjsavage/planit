@@ -1,17 +1,35 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.utils import simplejson
+from django.core import serializers
 
-from django.contrib.auth.models import User
+from planit.util.phone import format_number
 
-from django.db.models.signals import post_save
+class UserProfileManager(BaseUserManager):
+    def create(self, phone, password):
+        if not phone or not password:
+            raise ValueError("Must have a phone number")
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
-    phone = models.CharField(max_length=12, null=True, blank=True)
+        user = self.model(
+            phone=format_number(phone)
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
 
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        new_user_profile = UserProfile(user=instance)
-        new_user_profile.save()
 
-post_save.connect(create_user_profile, sender=User)
+
+class UserProfile(AbstractBaseUser):
+    phone = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
+
+    USERNAME_FIELD = 'phone'
+
+    objects = UserProfileManager()
+
+    def __unicode__(self):
+        return "%s" % (self.phone)
+
