@@ -18,11 +18,9 @@ class UserProfileManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
-
-
 class UserProfile(AbstractBaseUser):
     phone = models.CharField(max_length=255, unique=True)
+    phone_confirmed = models.BooleanField(default=False)
     name = models.CharField(max_length=255, blank=True, null=True)
     email = models.CharField(max_length=255, blank=True, null=True)
 

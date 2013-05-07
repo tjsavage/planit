@@ -1,6 +1,6 @@
 from django.db import models
 
-from django.contrib.auth.models import User
+from planit.accounts.models import UserProfile
 
 class ScheduleBlock(models.Model):
     DAYS = (
@@ -13,7 +13,7 @@ class ScheduleBlock(models.Model):
         ('Sa', 'Saturday')
     )
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(UserProfile)
     day = models.CharField(max_length=2, choices=DAYS)
     start_time = models.TimeField()
     end_time = models.TimeField()
