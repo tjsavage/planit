@@ -3,6 +3,8 @@ import os, sys
 
 AUTH_USER_MODEL = 'accounts.UserProfile'
 
+PHONENUMER_DEFAULT_REGION = "US"
+#(sic)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

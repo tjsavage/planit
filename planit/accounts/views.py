@@ -4,12 +4,18 @@ from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 
-from planit.accounts.models import UserProfile
-from planit.util.phone import format_number
+from planit.accounts.models import UserProfile, LoginToken, generate_login_token
+from phonenumber_field.phonenumber import to_python
+
 
 def register(request):
     if request.method == 'GET':
-        return render_to_response('accounts/register.html', {},
+        phone = request.GET.get("phone", "")
+        next_url = request.GET.get("next", "")
+        return render_to_response('accounts/register.html', {
+                "phone": phone,
+                "next": next_url
+            },
             context_instance=RequestContext(request))
     elif request.method == 'POST':
         try:
@@ -20,6 +26,7 @@ def register(request):
         password = request.POST.get("password", None)
         name = request.POST.get("name", None)
         email = request.POST.get("email", None)
+        next = request.POST.get("next", None)
 
         if UserProfile.objects.filter(phone=phone).count():
             return HttpResponse("already created")
@@ -38,7 +45,10 @@ def register(request):
         user = auth.authenticate(phone=user.phone, password=password)
 
         auth.login(request, user)
-        return HttpResponseRedirect('/accounts/')
+        if next:
+            return HttpResponseRedirect(next)
+        else:
+            return HttpResponseRedirect("/accounts/")
 
 def login(request):
     if request.method == 'POST':
@@ -56,6 +66,33 @@ def login(request):
     else:
         return render_to_response("accounts/login.html", {},
             context_instance=RequestContext(request))
+
+def token_login(request):
+    if request.method == 'GET':
+        token = request.GET['token']
+
+        try:
+            login_token = LoginToken.objects.get(token=token)
+        except LoginToken.DoesNotExist:
+            return HttpResponse("invalid token")
+
+        try:
+            user = UserProfile.objects.get(phone=login_token.phone)
+        except UserProfile.DoesNotExist:
+            return HttpResponseRedirect("/accounts/register/?phone=%s&next=%s" % (login_token.phone, login_token.next_url))
+
+
+def invite(request):
+    if request.method == 'POST':
+        phone = request.POST['phone']
+        login_token = generate_login_token(phone, next="/junk/")
+
+        return HttpResponse("http://localhost:8000/t/?token=%s" % login_token.token)
+
+    else:
+        return render_to_response("accounts/invite.html", {},
+            context_instance=RequestContext(request))
+
 
 @login_required
 def index(request):

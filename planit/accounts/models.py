@@ -1,11 +1,16 @@
+import hashlib, random, string
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils import simplejson
 from django.core import serializers
+from django.conf import settings
 
 from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.phonenumber import to_python
 
-from planit.util.phone import format_number
+import logging
+logger = logging.getLogger(__name__)
 
 class UserProfileManager(BaseUserManager):
     def create(self, phone, password):
@@ -13,7 +18,7 @@ class UserProfileManager(BaseUserManager):
             raise ValueError("Must have a phone number")
 
         user = self.model(
-            phone=format_number(phone)
+            phone=to_python(phone)
         )
 
         user.set_password(password)
@@ -34,4 +39,28 @@ class UserProfile(AbstractBaseUser):
         return "%s" % (self.phone)
 
 class LoginToken(models.Model):
-    phone = models.CharField(max_length=255)
+    phone = PhoneNumberField()
+    token = models.CharField(max_length=255)
+    date_created = models.DateTimeField(auto_now_add=True)
+    next_url = models.CharField(max_length=255, blank=True, null=True)
+
+def generate_login_token(phone, next=""):
+    logger.debug("Generating token for %s" % phone)
+
+    sha = hashlib.sha1()
+    sha.update(settings.SECRET_KEY)
+    sha.update(str(to_python(phone)))
+    sha.update(randomword(20))
+
+    token = sha.hexdigest()
+
+    login_token = LoginToken.objects.create(token=token, 
+                                            phone=phone,
+                                            next_url=next)
+    logger.debug("Phone? %s" % login_token.phone)
+
+    return login_token
+
+def randomword(length):
+   return ''.join(random.choice(string.lowercase) for i in range(length))
+

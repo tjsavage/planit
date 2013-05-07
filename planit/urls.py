@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'planit.views.home', name='home'),
     url(r'^accounts/', include('planit.accounts.urls')),
+    url(r'^t/$', 'planit.accounts.views.token_login'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
