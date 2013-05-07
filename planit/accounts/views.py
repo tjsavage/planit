@@ -13,7 +13,7 @@ def register(request):
             context_instance=RequestContext(request))
     elif request.method == 'POST':
         try:
-            phone = format_number(request.POST.get("phone", None))
+            phone = request.POST.get("phone", None)
         except ValueError:
             return HttpResponse("Invalid phone")
 
@@ -23,8 +23,10 @@ def register(request):
 
         if UserProfile.objects.filter(phone=phone).count():
             return HttpResponse("already created")
-
-        user = UserProfile.objects.create(phone, password)
+        try:
+            user = UserProfile.objects.create(phone, password)
+        except ValueError:
+            return HttpResponse("invalid phone")
         if not user:
             return HttpResponse("error")
 
@@ -33,17 +35,14 @@ def register(request):
 
         user.save()
 
-        user = auth.authenticate(phone=phone, password=password)
+        user = auth.authenticate(phone=user.phone, password=password)
 
         auth.login(request, user)
         return HttpResponseRedirect('/accounts/')
 
 def login(request):
     if request.method == 'POST':
-        try:
-            phone = format_number(request.POST['phone'])
-        except ValueError:
-            return HttpResponse("invalid phone")
+        phone = request.POST['phone']
         password = request.POST['password']
 
         user = auth.authenticate(phone=phone, password=password)
