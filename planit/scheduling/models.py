@@ -17,7 +17,7 @@ class ScheduleBlock(models.Model):
         return { 'day': '%s' % self.day, 
                 'start': '%s' % time.strftime(self.start, settings.TIME_FORMAT), 
                 'end': '%s' % time.strftime(self.end, settings.TIME_FORMAT), 
-                'status': '%s' % str(self.busy).lower()}
+                'busy': self.busy}
 
 
 def create_schedule(sender, instance, created, **kwargs):

@@ -1,5 +1,6 @@
 var Scheduler = {
-    days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    dayViews: {}
 };
 
 Scheduler.ScheduleBlock = Backbone.Model.extend({
@@ -11,15 +12,28 @@ Scheduler.Schedule = Backbone.Collection.extend({
         this.user_id = options.user_id;
 
         this.on("change", this.change, this);
+        this.on("add", this.added, this);
     },
 
     url: function() {
         return "/api/schedule/" + this.user_id + "/";
     },
 
+    update: function() {
+        $.ajax({
+            type: "POST",
+            url: this.url(),
+            data: JSON.stringify(this.toJSON()),
+            dataType: "json"
+        });
+    },
+
     change: function() {
-        console.log("changed");
-        this.sync();
+        this.update();
+    },
+
+    added: function(model) {
+        Scheduler.dayViews[model.get("day")].trigger("add:block", model);
     }
 });
 
@@ -29,7 +43,7 @@ Scheduler.ScheduleBlockView =  Backbone.View.extend({
     },
 
     render: function() {
-        var template = _.template( $("#block-template").html())
+        var template = _.template( $("#block-template").html());
         this.$el.html(template(this.model.toJSON()));
         this.$el.addClass("iosSlider1");
 
@@ -60,7 +74,7 @@ Scheduler.ScheduleBlockView =  Backbone.View.extend({
 Scheduler.ScheduleDayView = Backbone.View.extend({
     initialize: function(options) {
         this.day = options.day;
-        this.model.on("add", this.add, this);
+        this.on("add:block", this.addBlock, this);
     },
 
     render: function() {
@@ -70,7 +84,10 @@ Scheduler.ScheduleDayView = Backbone.View.extend({
         return this;
     },
 
-    add: function(model) {
+    addBlock: function(model) {
+        if (!model.get("busy")) {
+            console.log("FALSE!");
+        }
         if (model.get("day") == this.day) {
             var view = new Scheduler.ScheduleBlockView({model: model});
             this.$el.find(".block-slider-container").append(view.render().el);
@@ -78,6 +95,7 @@ Scheduler.ScheduleDayView = Backbone.View.extend({
                 snapToChildren: true,
                 desktopClickDrag: true,
                 infiniteSlider: true,
+                startAtSlide: model.get("busy") ? 2 : 1,
                 onSlideComplete: function(args) {
                     view.trigger("slide:complete", args);
                 }
@@ -90,9 +108,11 @@ $(function() {
     var schedule = new Scheduler.Schedule([], {user_id: 1});
 
     for (var i = 0; i < Scheduler.days.length; i++) {
+        var day = Scheduler.days[i];
         var scheduleDayView = new Scheduler.ScheduleDayView({model: schedule,
-                                                        day: Scheduler.days[i]});
+                                                        day: day});
         $("#day-slider").append(scheduleDayView.render().el);
+        Scheduler.dayViews[day] = scheduleDayView;
     }
 
     $("#day-slider-container").iosSlider({

@@ -17,6 +17,9 @@ def schedule(request, user_id):
 
     if request.method == 'GET':
         blocks_json = [block.to_json() for block in ScheduleBlock.objects.filter(user=user)]
+        
+        blocks_json = sorted_by_day(blocks_json)
+
         return HttpResponse(simplejson.dumps(blocks_json))
 
     elif request.method == 'POST':
@@ -28,9 +31,14 @@ def schedule(request, user_id):
                                                                 day=block["day"],
                                                                 start=datetime.strptime(block["start"], settings.TIME_FORMAT),
                                                                 end=datetime.strptime(block["end"], settings.TIME_FORMAT))
-            schedule_block.busy = block["busy"]
+            schedule_block.busy = True if block["busy"] == "true" else False
             schedule_block.save()
 
         blocks_json = [block.to_json() for block in ScheduleBlock.objects.filter(user=user)]
 
+        blocks_json = sorted_by_day(blocks_json)
+
         return HttpResponse(simplejson.dumps(blocks_json))
+
+def sorted_by_day(blocks):
+    return sorted(blocks, key=lambda b: settings.DAYS.index(b["day"]))
