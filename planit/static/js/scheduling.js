@@ -18,21 +18,21 @@ Scheduler.Schedule = Backbone.Collection.extend({
 
 Scheduler.ScheduleBlockView =  Backbone.View.extend({
     render: function() {
-        var template = _.template( $("#schedule-block-template").html())
+        var template = _.template( $("#block-template").html())
         this.$el.html(template(this.model.toJSON()));
         this.$el.addClass("iosSlider1");
-        console.log(this.model.get("start").indexOf("30"));
+
         if (this.model.get("start").indexOf("30") == -1) {
             this.$el.css("float", "left");
         } else {
             this.$el.css("float", "right");
         }
         if (parseInt(this.model.get("start").substring(0, 2)) % 2) {
-            this.$el.find(".item1").addClass("odd-green");
-            this.$el.find(".item2").addClass("odd-red");
+            this.$el.find(".block-slide-free").addClass("odd free");
+            this.$el.find(".block-slide-busy").addClass("odd busy");
         } else {
-            this.$el.find(".item1").addClass("even-green");
-            this.$el.find(".item2").addClass("even-red");
+            this.$el.find(".block-slide-free").addClass("even free");
+            this.$el.find(".block-slide-busy").addClass("even busy");
         }
         return this;
     }
@@ -47,14 +47,14 @@ Scheduler.ScheduleDayView = Backbone.View.extend({
     render: function() {
         var template = _.template( $("#day-template").html());
         this.$el.html(template({"day": this.day}));
-
+        this.$el.addClass("day-slide");
         return this;
     },
 
     add: function(model) {
         if (model.get("day") == this.day) {
             var view = new Scheduler.ScheduleBlockView({model: model});
-            this.$el.find(".schedule-block-container").append(view.render().el);
+            this.$el.find(".block-slider-container").append(view.render().el);
             this.$el.find('.iosSlider1').iosSlider({
                 snapToChildren: true,
                 desktopClickDrag: true
@@ -71,19 +71,15 @@ $(function() {
                                                         day: Scheduler.days[i]});
         $("#day-slider").append(scheduleDayView.render().el);
     }
-    /*
-    $(document).on("pageinit", "#schedule-page", function() {
-        $(document).on("swiperight swipeleft", "#schedule-page", function(e) {
-            if ($.mobile.activePage.jqmData("panel") !== "open") {
-                if (e.type === "swipeRight") {
-                    $("#left-panel").panel("open");
-                } else if (e.type === "swipeLeft") {
-                    $("#left-panel").panel("close");
-                }
-            }
-        });
+
+    $("#day-slider-container").iosSlider({
+        snapToChildren: true,
+        desktopClickDrag: true,
+        navPrevSelector: $(".slider-button.slider-prev-button"),
+        navNextSelector: $(".slider-button.slider-next-button"),
+        unselectableSelector: $(".block-slider-container")
     });
-*/
+
     schedule.fetch();
 
 });

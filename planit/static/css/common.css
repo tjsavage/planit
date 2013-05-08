@@ -1,41 +1,91 @@
+html {
+    height: 100%;
+}
+
 body {
     text-align: center;
     background-image: url('/static/img/debut_light.png');
     background-color: white;
     color: gray;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
 }
 
 h4 {
     padding-top: 5px;
 }
 
-body .main .slider .odd-green {
+body .main .block-slider .odd.free {
     background-color: #2ECC71;
 /*  -webkit-box-shadow:inset 0px 0px 0px 3px #2ECC71;
     -moz-box-shadow:inset 0px 0px 0px 3px #2ECC71;
     box-shadow:inset 0px -3px 0px 8px #2ECC71;*/
 }
 
-body .main .slider .odd-red {
+body .main .block-slider .odd.busy {
     background-color: #E74C3C;
 /*  border: 2px #C0392B solid;
 */
 }
 
-body .main .slider .even-green {
+body .main .block-slider .even.free {
     background-color: #27AE60;
 /*  -webkit-box-shadow:inset 0px 0px 0px 3px #2ECC71;
     -moz-box-shadow:inset 0px 0px 0px 3px #2ECC71;
     box-shadow:inset 0px -3px 0px 8px #2ECC71;*/
 }
 
-body .main .slider .even-red {
+body .main .block-slider .even.busy{
     background-color: #C0392B;
+}
+
+#container {
+    height: 100%;
 }
 
 /* main */
 .main {
+    height: 100%;
+}
 
+#day-slider-container {
+    height: 100%;
+}
+
+#day-slider {
+    height: 100%;
+    top: 0px;
+}
+
+.day-slide {
+    height: 100%;
+}
+
+.block-slider-container {
+    height: 100%;
+}
+
+.day-header {
+    font-size: 40px;
+}
+
+.slider-button {
+    margin-bottom: -40px;
+    width: 20px;
+    height: 40px;
+    z-index: 2;
+    margin: 6px;
+}
+
+.slider-prev-button {
+    float: left;
+    background: url(/static/img/slider-buttons.png) no-repeat 0 0;
+}
+            
+.slider-next-button {
+    float: right;  
+    background: url(/static/img/slider-buttons.png) no-repeat 100% 0;
 }
 
 /* footer */
@@ -61,7 +111,7 @@ body .main .slider .even-red {
 }
 
 /* slider 1 */
-.main .schedule-block-container {
+.main .block-container {
     position: absolute;
     top: 40px;
     bottom: 150px;
@@ -78,13 +128,13 @@ body .main .slider .even-red {
     height: 50px;
 }
 
-.iosSlider1 .slider {
+.iosSlider1 .block-slider {
     width: 100%;
     height: 100%;
     text-align: center;
 }
 
-.iosSlider1 .slider .item {
+.iosSlider1 .block-slider .block-slide {
     float: left;
     width: 100%;
     height: 100%;
@@ -92,82 +142,12 @@ body .main .slider .even-red {
 
 }
 
-.iosSlider1 .slider .item1 {
+.iosSlider1 .block-slider .block-slide-free {
     background: #2ECC71;
     color: white;
 }
 
-.iosSlider1 .slider .item2 {
+.iosSlider1 .block-slider .block-slide-busy {
     background: #E74C3C;
     color: white;
-}
-
-.iosSlider1 .slider .item3 {
-    background: #aaa;
-}
-
-.iosSlider1 .slider .item4 {
-    background: #ddd;
-}
-
-.iosSlider1 .slider .item5 {
-    background: #777;
-}
-
-/* slider 2 */
-.slider2Container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 150px;
-}
-
-.iosSlider2 {
-    position: relative;
-    bottom: 0;
-    left: 0;
-    overflow: hidden;
-    width: 100%;
-    height: 150px;
-}
-
-.iosSlider2 .slider {
-    width: 100%;
-    height: 100%;
-}
-
-.iosSlider2 .slider .item {
-    float: left;
-    width: 250px;
-    height: 100%;
-}
-
-.iosSlider2 .slider .item1 {
-    background: #666;
-}
-
-.iosSlider2 .slider .item2 {
-    background: #999;
-}
-
-.iosSlider2 .slider .item3 {
-    background: #aaa;
-}
-
-.iosSlider2 .slider .item4 {
-    background: #ddd;
-}
-
-.iosSlider2 .slider .item5 {
-    background: #777;
-}
-
-/* s2hidden */
-.sliderHidden .schedule-block-container {
-    bottom: 0;
-}
-
-.sliderHidden .slider2Container {
-    display: none;
 }
