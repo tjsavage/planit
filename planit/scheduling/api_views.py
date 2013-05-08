@@ -31,7 +31,7 @@ def schedule(request, user_id):
                                                                 day=block["day"],
                                                                 start=datetime.strptime(block["start"], settings.TIME_FORMAT),
                                                                 end=datetime.strptime(block["end"], settings.TIME_FORMAT))
-            schedule_block.busy = True if block["busy"] == "true" else False
+            schedule_block.busy = block["busy"]
             schedule_block.save()
 
         blocks_json = [block.to_json() for block in ScheduleBlock.objects.filter(user=user)]
