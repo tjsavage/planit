@@ -33,7 +33,7 @@ Scheduler.Schedule = Backbone.Collection.extend({
     },
 
     added: function(model) {
-        Scheduler.dayViews[model.get("day")].trigger("add:block", model);
+        console.log("added");
     }
 });
 
@@ -75,6 +75,8 @@ Scheduler.ScheduleDayView = Backbone.View.extend({
     initialize: function(options) {
         this.day = options.day;
         this.on("add:block", this.addBlock, this);
+        this.drawn = false;
+        this.on("draw", this.drawBlocks, this);
     },
 
     render: function() {
@@ -84,10 +86,21 @@ Scheduler.ScheduleDayView = Backbone.View.extend({
         return this;
     },
 
-    addBlock: function(model) {
-        if (!model.get("busy")) {
-            console.log("FALSE!");
+    drawBlocks: function() {
+        if (!this.drawn) {
+            var T = this;
+
+            $.each(this.model.filter(function(block) {
+                return block.get("day") == T.day;
+            }), function(i, block) {
+                T.trigger("add:block", block);
+            });
+            this.trigger("drew");   
+            this.drawn = true;
         }
+    },
+
+    addBlock: function(model) {
         if (model.get("day") == this.day) {
             var view = new Scheduler.ScheduleBlockView({model: model});
             this.$el.find(".block-slider-container").append(view.render().el);
@@ -102,7 +115,7 @@ Scheduler.ScheduleDayView = Backbone.View.extend({
             });
         }
     }
-})
+});
 
 $(function() {
     var schedule = new Scheduler.Schedule([], {user_id: 1});
@@ -120,9 +133,22 @@ $(function() {
         desktopClickDrag: true,
         navPrevSelector: $(".slider-button.slider-prev-button"),
         navNextSelector: $(".slider-button.slider-next-button"),
-        unselectableSelector: $(".block-slider-container")
+        unselectableSelector: $(".block-slider-container"),
+        onSlideComplete: function(args) {
+            var dayIndex = args.currentSlideNumber - 1;
+            if (dayIndex < 5) {
+                var nextDay = Scheduler.days[dayIndex + 2];
+                Scheduler.dayViews[nextDay].trigger("draw");
+            }
+        }
     });
 
-    schedule.fetch();
+    schedule.fetch({
+        success: function() {
+            Scheduler.dayViews["Sunday"].trigger("draw");
+            Scheduler.dayViews["Monday"].trigger("draw");
+            Scheduler.dayViews["Tuesday"].trigger("draw");
+        }
+    });
 
 });
