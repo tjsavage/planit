@@ -64,6 +64,7 @@ body .main .block-slider .even.busy{
 
 .block-slider-container {
     height: 100%;
+    overflow: auto;
 }
 
 .day-header {
