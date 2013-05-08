@@ -116,5 +116,5 @@ def invite(request):
 
 @login_required
 def index(request):
-    return render_to_reponse("accounts/dashboard.html", {},
+    return render_to_response("accounts/dashboard.html", {},
         context_instance=RequestContext(request))
