@@ -33,9 +33,10 @@ def best_starts(users, range_start, range_end, duration):
     while potential_start < range_end:
         attendees = []
         for user in users:
-            if is_availabe(user, potential_start, duration):
+            if is_available(user, potential_start, duration):
                 attendees.append(user)
         result.append((potential_start, attendees))
+        potential_start += td_duration
 
-    result = sorted(result, key=lamba t: len(t[1]), reverse=True)
+    result = sorted(result, key=lambda t: len(t[1]), reverse=True)
     return result

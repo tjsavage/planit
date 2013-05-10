@@ -118,7 +118,7 @@ Scheduler.ScheduleDayView = Backbone.View.extend({
 });
 
 $(function() {
-    var schedule = new Scheduler.Schedule([], {user_id: 1});
+    var schedule = new Scheduler.Schedule([], {user_id: $("#user-id").html() });
 
     for (var i = 0; i < Scheduler.days.length; i++) {
         var day = Scheduler.days[i];

@@ -34,23 +34,23 @@ class SuggestedTime(models.Model):
     declined = models.ManyToManyField(UserProfile, related_name="declined")
 
 
-def create_schedule(user):
+def create_schedule(user, default_busy=None):
     for day in settings.DAYS:
         time = settings.START_TIME
         interval = settings.INTERVAL
         while time < settings.END_TIME:
-            block = ScheduleBlock.objects.get_or_create(user=user,
+            block, created = ScheduleBlock.objects.get_or_create(user=user,
                 day=day,
                 start=time,
                 end=time+settings.INTERVAL)
-            if "default_busy" in kwargs:
-                block.busy = kwargs["default_busy"]
+            if "default_busy" is not None:
+                block.busy = default_busy
                 block.save()
             time += settings.INTERVAL
 
 def create_schedule_signal(sender, instance, created, **kwargs):
     if created:
-        create_schedule(instance)
+        create_schedule(instance, default_busy=False)
 
 
 post_save.connect(create_schedule_signal, sender=UserProfile)

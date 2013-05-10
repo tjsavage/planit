@@ -38,6 +38,13 @@ class UserProfile(AbstractBaseUser):
     def __unicode__(self):
         return "%s" % (self.phone)
 
+    def toJSON(self):
+        result = {}
+        result["phone"] = str(self.phone)
+        result["name"] = self.name
+        result["email"] = self.email
+        return result
+
 class LoginToken(models.Model):
     phone = PhoneNumberField()
     token = models.CharField(max_length=255)
