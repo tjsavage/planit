@@ -15,6 +15,9 @@
         <!-- Loading Flat UI -->
         <link href="/static/flat-ui-master/css/flat-ui.css" rel="stylesheet">
 
+        <!-- Loading fontaweseom -->
+        <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+
         <!-- CSS -->
         <link rel = "stylesheet" media = "screen" href = "/static/css/common.css" />
         
@@ -32,10 +35,16 @@
     </head>
     
     <body>
-        <script type="text/template" id="block-template">
+        <script type="text/template" id="block-template-odd">
             <div class = 'block-slider'>
-                <div class = 'block-slide block-slide-free'><h5><%= start %> -  <%= end %></h5></div>
-                <div class = 'block-slide block-slide-busy'><h5>BUSY</h5></div>                  
+                <div class = 'block-slide block-slide-free odd free'><h5><%= start %> -  <%= end %></h5></div>
+                <div class = 'block-slide block-slide-busy odd busy'><h5>BUSY</h5></div>                  
+            </div>
+        </script>
+        <script type="text/template" id="block-template-even">
+            <div class = 'block-slider'>
+                <div class = 'block-slide block-slide-free even free'><h5><%= start %> -  <%= end %></h5></div>
+                <div class = 'block-slide block-slide-busy even busy'><h5>BUSY</h5></div>                  
             </div>
         </script>
         <script type="text/template" id="day-template">
@@ -45,6 +54,7 @@
             </div>
             <div class="main">
                 <div class="block-slider-container">
+                    <i class="icon-spinner icon-spin icon-4x"></i>
                 </div>
             </div>
         </script>
