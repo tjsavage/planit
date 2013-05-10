@@ -13,8 +13,12 @@ def is_available(user, start, duration):
     free_contiguous_time = 0
     day = start.strftime("%A")
     while free_contiguous_time < duration:
-        block = ScheduleBlock.objects.filter(user=user, start=free_block_start, day=day)[0]
-        if block.busy:
+        blocks = ScheduleBlock.objects.filter(user=user, start=free_block_start, day=day)
+        if blocks.count() > 0:
+            block = blocks[0]
+            if block.busy:
+                return False
+        else:
             return False
         free_contiguous_time += 30
         free_block_start = increment_time(start, free_contiguous_time)
