@@ -19,19 +19,38 @@ class ScheduleBlock(models.Model):
                 'end': '%s' % time.strftime(self.end, settings.TIME_FORMAT), 
                 'busy': self.busy}
 
+class Meeting(models.Model):
+    name = models.CharField(max_length=255)
+    range_start = models.DateTimeField()
+    range_end = models.DateTimeField()
+    creator = models.ForeignKey(UserProfile, related_name="creator")
+    users = models.ManyToManyField(UserProfile, related_name="users")
+    duration = models.IntegerField()
 
-def create_schedule(sender, instance, created, **kwargs):
+class SuggestedTime(models.Model):
+    meeting = models.ForeignKey('Meeting')
+    datetime = models.DateTimeField()
+    accepted = models.ManyToManyField(UserProfile, related_name="accepted")
+    declined = models.ManyToManyField(UserProfile, related_name="declined")
+
+
+def create_schedule(user):
+    for day in settings.DAYS:
+        time = settings.START_TIME
+        interval = settings.INTERVAL
+        while time < settings.END_TIME:
+            block = ScheduleBlock.objects.get_or_create(user=user,
+                day=day,
+                start=time,
+                end=time+settings.INTERVAL)
+            if "default_busy" in kwargs:
+                block.busy = kwargs["default_busy"]
+                block.save()
+            time += settings.INTERVAL
+
+def create_schedule_signal(sender, instance, created, **kwargs):
     if created:
-        for day in settings.DAYS:
-            time = settings.START_TIME
-            interval = settings.INTERVAL
-            while time < settings.END_TIME:
-                ScheduleBlock.objects.get_or_create(user=instance,
-                    day=day,
-                    start=time,
-                    end=time+settings.INTERVAL,
-                    busy=False)
-                time += settings.INTERVAL
+        create_schedule(instance)
 
 
-post_save.connect(create_schedule, sender=UserProfile)
+post_save.connect(create_schedule_signal, sender=UserProfile)
