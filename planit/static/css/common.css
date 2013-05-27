@@ -10,6 +10,7 @@ body {
     height: 100%;
     margin: 0px;
     padding: 0px;
+    overflow: hidden;
 }
 
 h4 {
@@ -91,10 +92,8 @@ body .main .block-slider .even.busy{
 
 /* footer */
 .footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: relative;
+    clear: both;
     height: 150px;
     background: #ddd;
 }
