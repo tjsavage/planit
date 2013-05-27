@@ -1,0 +1,24 @@
+#footer {
+    position : absolute;
+    text-align: center;
+    bottom : 0;
+    height : 40px;
+    margin-top : 40px;
+    font-size: 10px;
+}
+
+#plus-button {
+	margin-left: 0px;
+	font-size: 20px;
+	font-weight: bold;
+	padding: 5px 10px 5px 10px;
+	margin-bottom: 10px;
+}
+
+#create-new {
+	max-width: 475px;
+}
+
+#create-new h3 {
+	font-size: 16px;
+}

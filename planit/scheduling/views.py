@@ -11,3 +11,6 @@ def schedule(request):
 
     return render_to_response("scheduling/schedule.html", {}, 
         context_instance=RequestContext(request))
+
+def new(request):
+	return render_to_response("scheduling/new.html", {}, context_instance=RequestContext(request))

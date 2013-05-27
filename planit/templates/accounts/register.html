@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Loading Bootstrap -->
-    <link href="/static/flat-ui-master/css/bootstrap.css" rel="stylesheet">
+    <link href="../../static/flat-ui-master/css/bootstrap.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
 
     <!-- Loading Flat UI -->
-    <link href="/static/flat-ui-master/css/flat-ui.css" rel="stylesheet">
+    <link href="../../static/flat-ui-master/css/flat-ui.css" rel="stylesheet">
     <link rel="shortcut icon" href="images/favicon.ico">
 
     <!-- Stylesheets -->
-    <link href="/static/css/index.css" rel="stylesheet">
+    <link href="../../static/css/index.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
     <!--[if lt IE 9]>
@@ -25,7 +25,7 @@
     <div id="container" class="span12">
         <div id="registration-form" class="span4">
             <div>
-                <h1>Sign-up</h1>
+                <h2 style="padding-left: 10px; text-align: left;color:#2980B9">Sign-up</h2>
             </div>
             <form method="post">
                 {% csrf_token %}
@@ -37,7 +37,7 @@
                     <input type="hidden" value="{{ next }}" name="next" />
                 </div>
                 <div>
-                    <input type="submit" value="Register" class="btn btn-large align-right" />
+                    <input type="submit" value="Register" class="btn btn-primary " />
                 </div>
             </form>
         </div>
