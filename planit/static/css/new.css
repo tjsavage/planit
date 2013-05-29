@@ -5,6 +5,7 @@
     height : 40px;
     margin-top : 40px;
     font-size: 10px;
+    clear: both;
 }
 
 #plus-button {
@@ -17,6 +18,7 @@
 
 #create-new {
 	max-width: 475px;
+    padding-bottom: 20px;
 }
 
 #create-new h3 {
