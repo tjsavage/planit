@@ -8,6 +8,7 @@ urlpatterns = patterns('planit.scheduling.views',
     # Examples:
     url(r'^$', 'schedule'),
     url(r'meeting/create/$', 'create_meeting'),
+    url(r'new/$', 'new'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
