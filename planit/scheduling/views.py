@@ -11,3 +11,8 @@ def schedule(request):
 
     return render_to_response("scheduling/schedule.html", {}, 
         context_instance=RequestContext(request))
+
+def create_meeting(request):
+
+    return render_to_response("scheduling/create_meeting.html", {},
+        context_instance=RequestContext(request))
