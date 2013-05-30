@@ -36,15 +36,18 @@
                             <h3>Duration:</h3>
                                 <input type="text" class="" id="duration" value placeholder="ex.) 1.5 hours">       
                             <h3>Invitees:</h3>
+                            <div id="invitees"></div>
+                            <!--
                                 <div>
                                     <input type="text" value placeholder="Name">
                                     <input type="text" value placeholder="Number"> &nbsp; <a href="#" id="plus-button"class="btn btn-primary btn-small">+</a>       
                                 </div>
-                            <!-- For each invitee added, display name, number, and delete option. -->
+                            <!-- For each invitee added, display name, number, and delete option.
                             <div>
                                 <span class="fui-cross-16"></span>&nbsp;&nbsp; FirstName LastName: (xxx) xxx-xxxx 
 
                             </div>
+                            -->
                                     
                             <hr>
                             <!-- Send invite -->
@@ -66,8 +69,13 @@
 <link rel="stylesheet" type="text/css" media="all" href="/static/jsdatepick-calendar/jsDatePick_ltr.min.css" />
 <script type="text/javascript" src="/static/jsdatepick-calendar/jquery.1.4.2.js"></script>
 <script type="text/javascript" src="/static/jsdatepick-calendar/jsDatePick.jquery.min.1.3.js"></script>
+<script type="text/javascript" src="/static/js/underscore.min.js"></script>
+<script type="text/javascript" src="/static/js/backbone.min.js"></script>
+<script type="text/javascript" src="/static/js/peoplelist.js"></script>
 <script type="text/javascript">
-    window.onload = function(){
+    $(function(){
+        var options = {el: $("#invitees")};
+        new PersonList.PersonListView(options);
         new JsDatePick({
             useMode:2,
             target:"start-date-select",
@@ -102,7 +110,7 @@
             weekStartDay:1*/
         });
 
-    };
+    });
     function confirmSend() {
         var r=confirm("Clicking OK will send one text message to each invitee. Standard SMS rates apply. Rates are determined by the recipient's cellular provider and will be paid for by the recipient.");
     }
