@@ -98,6 +98,7 @@ def newly_created(request):
     if request.method == 'POST':
         password = request.POST["password"]
         user = request.user
+        user.newly_created = False
         user.set_password(password)
         user.save()
 
