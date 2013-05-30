@@ -7,7 +7,7 @@
 
         <!-- Loading Bootstrap -->
         <link href="/static/flat-ui-master/css/bootstrap.css" rel="stylesheet">
-        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="/static/css/bootstrap-combined.min.css" rel="stylesheet">
 
         <!-- Loading Flat UI -->
         <link href="/static/flat-ui-master/css/flat-ui.css" rel="stylesheet">
@@ -28,7 +28,7 @@
             <div class="span7" id="create-new">
                 <div style="text-align:left">
                             <h3>Group name:</h3>
-                                <input type="text" style="padding: 10px"value placeholder="ex.) &quot;My Group&quot;">
+                                <input id="group-name" type="text" style="padding: 10px"value placeholder="ex.) &quot;My Group&quot;">
                             <h3>Start Date:</h3>
                                 <input type="text" class="" id="start-date-select" value placeholder="Click to select dates.">
                             <h3>End Date:</h3>
@@ -72,46 +72,47 @@
 <script type="text/javascript" src="/static/js/underscore.min.js"></script>
 <script type="text/javascript" src="/static/js/backbone.min.js"></script>
 <script type="text/javascript" src="/static/js/peoplelist.js"></script>
+<script type="text/javascript" src="/static/js/ajaxSetup.js"></script>
 <script type="text/javascript">
+    var inviteesView;
     $(function(){
+        setupAjaxCsrf();
+
         var options = {el: $("#invitees")};
-        new PersonList.PersonListView(options);
+        inviteesView = new PersonList.PersonListView(options);
         new JsDatePick({
             useMode:2,
             target:"start-date-select",
-            dateFormat:"%d-%M-%Y"
-            /*selectedDate:{                This is an example of what the full configuration offers.
-                day:5,                      For full documentation about these settings please see the full version of the code.
-                month:9,
-                year:2006
-            },
-            yearsRange:[1978,2020],
-            limitToToday:false,
-            cellColorScheme:"beige",
-            dateFormat:"%m-%d-%Y",
-            imgPath:"img/",
-            weekStartDay:1*/
+            dateFormat:"%d-%m-%Y"
         });
 
         new JsDatePick({
             useMode:2,
             target:"end-date-select",
-            dateFormat:"%d-%M-%Y"
-            /*selectedDate:{                This is an example of what the full configuration offers.
-                day:5,                      For full documentation about these settings please see the full version of the code.
-                month:9,
-                year:2006
-            },
-            yearsRange:[1978,2020],
-            limitToToday:false,
-            cellColorScheme:"beige",
-            dateFormat:"%m-%d-%Y",
-            imgPath:"img/",
-            weekStartDay:1*/
+            dateFormat:"%d-%m-%Y"
         });
 
     });
     function confirmSend() {
         var r=confirm("Clicking OK will send one text message to each invitee. Standard SMS rates apply. Rates are determined by the recipient's cellular provider and will be paid for by the recipient.");
+        if (r) {
+            var data = {};
+            data["invitees"] = inviteesView.model.toJSON();
+            data["name"] = $("#group-name").val();
+            data["start"] = $("#start-date-select").val();
+            data["end"] = $("#end-date-select").val();
+            data["duration"] = $("#duration").val();
+            $.ajax({
+                type: "POST",
+                url: "/scheduling/meeting/create/",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(data, textStatus, jqXHR) {
+                    window.location = "/scheduling/meeting/" + data.pk;
+                }
+            });
+            return false;
+        }
     }
 </script>

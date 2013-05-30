@@ -79,8 +79,36 @@ def token_login(request):
 
         try:
             user = UserProfile.objects.get(phone=login_token.phone)
+            if user.newly_created:
+                user = auth.authenticate(phone=user.phone, password="nopassword")
+                auth.login(request, user)
+                return HttpResponseRedirect("/accounts/newly_created/?next=%s" % login_token.next_url)
+            else:
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                auth.login(request, user)
+                if login_token.next_url:
+                    return HttpResponseRedirect("%s" % login_token.next_url)
+                else:
+                    return HttpResponseRedirect("/accounts/")
         except UserProfile.DoesNotExist:
             return HttpResponseRedirect("/accounts/register/?phone=%s&next=%s" % (login_token.phone, login_token.next_url))
+
+@login_required
+def newly_created(request):
+    if request.method == 'POST':
+        password = request.POST["password"]
+        user = request.user
+        user.set_password(password)
+        user.save()
+
+        return HttpResponseRedirect("%s" % request.POST.get("next", "/"))
+
+    return render_to_response("accounts/newly_created.html", 
+                            {"name": request.user.name,
+                            "next": request.GET.get("next")},
+                            context_instance=RequestContext(request))
+
+
 
 def verify(request):
     if request.method == 'GET':
@@ -107,7 +135,7 @@ def invite(request):
         phone = request.POST['phone']
         login_token = generate_login_token(phone, next="/junk/")
 
-        return HttpResponse("http://localhost:8000/t/?token=%s" % login_token.token)
+        return HttpResponse("%s/t/?token=%s" % (request.get_host(), login_token.token))
 
     else:
         return render_to_response("accounts/invite.html", {},

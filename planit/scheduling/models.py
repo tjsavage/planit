@@ -27,6 +27,10 @@ class Meeting(models.Model):
     users = models.ManyToManyField(UserProfile, related_name="users")
     duration = models.IntegerField()
 
+    def to_json(self):
+        return { 'pk': '%s' % self.pk,
+                'name': '%s' % self.name}
+
 class SuggestedTime(models.Model):
     meeting = models.ForeignKey('Meeting')
     datetime = models.DateTimeField()
