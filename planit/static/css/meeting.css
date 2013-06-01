@@ -1,0 +1,14 @@
+#container {
+    overflow: scroll;
+}
+
+.block-slider .block-slide-free.even.free {
+    background-color: #27AE60;
+/*  -webkit-box-shadow:inset 0px 0px 0px 3px #2ECC71;
+    -moz-box-shadow:inset 0px 0px 0px 3px #2ECC71;
+    box-shadow:inset 0px -3px 0px 8px #2ECC71;*/
+}
+
+.block-slider .block-slide-busy.even.busy{
+    background-color: #C0392B;
+}

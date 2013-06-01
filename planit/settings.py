@@ -7,6 +7,7 @@ BASE_DIR = os.path.dirname(__file__)
 
 PHONENUMER_DEFAULT_REGION = "US"
 TIME_FORMAT = '%I:%M%p'
+DATE_FORMAT = '%m-%d-%Y'
 START_TIME = datetime.strptime("8:00AM", TIME_FORMAT)
 END_TIME = datetime.strptime("11:59PM", TIME_FORMAT)
 INTERVAL = timedelta(minutes=30)

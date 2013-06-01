@@ -4,10 +4,11 @@ from django.shortcuts import get_object_or_404
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
 from planit.accounts.models import UserProfile
-from planit.scheduling.models import ScheduleBlock
+from planit.scheduling.models import ScheduleBlock, Meeting, SuggestedTime
 from planit.scheduling import tasks
 
 import logging
@@ -64,10 +65,57 @@ def suggestions(request):
             d = {}
             d["start"] = suggestion[0].strftime("%Y-%m-%dT%H:%M:%S")
             d["duration"] = duration
-            d["available"] = [u.toJSON() for u in suggestion[1]]
+            d["available"] = [u.to_json() for u in suggestion[1]]
             results.append(d)
 
         return HttpResponse(simplejson.dumps(results))
+
+def meeting(request, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=int(meeting_id))
+
+    #if not request.user in meeting.users.all():
+    #    return HttpResponse("You don't belong here")
+
+    return HttpResponse(simplejson.dumps(meeting.to_json()))
+
+def meeting_availabilities(request, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=int(meeting_id))
+
+    return HttpResponse(simplejson.dumps(meeting.to_json()["suggestedTimes"]))
+
+@login_required
+def meeting_availability(request, meeting_id, suggested_time_id):
+    meeting = get_object_or_404(Meeting, pk=int(meeting_id))
+    suggested_time = get_object_or_404(SuggestedTime, pk=int(suggested_time_id))
+
+    if not request.user in meeting.users.all():
+        return HttpResponse("You don't belong here")
+
+    if suggested_time.meeting != meeting:
+        return HttpResponse("Your meeting and time don't match")
+
+    if request.method == 'POST':
+        if request.user in suggested_time.declined.all():
+            suggested_time.declined.remove(request.user)
+        if request.user not in suggested_time.accepted.all():
+            suggested_time.accepted.add(request.user)
+    elif request.method == 'DELETE':
+        if request.user not in suggested_time.declined.all():
+            suggested_time.declined.add(request.user)
+        if request.user in suggested_time.accepted.all():
+            suggested_time.accepted.remove(request.user)
+    elif request.method == 'GET':
+        if request.user in suggested_time.declined.all():
+            return HttpResponse('{"status":"declined"}');
+        elif request.user in suggested_time.accepted.all():
+            return HttpResponse('{"status":"accepted"}');
+        else:
+            return HttpResponse('{"status":""}');
+
+    suggested_time.save()
+    return HttpResponse("200")
+
+
 
 def sorted_by_day(blocks):
     return sorted(blocks, key=lambda b: settings.DAYS.index(b["day"]))

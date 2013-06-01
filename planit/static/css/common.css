@@ -128,6 +128,15 @@ body .main .block-slider .even.busy{
     height: 50px;
 }
 
+.iosSlider1-full {
+    position: relative;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 50px;
+}
+
 .iosSlider1 .block-slider {
     width: 100%;
     height: 100%;

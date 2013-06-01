@@ -70,7 +70,7 @@ class UserProfile(AbstractBaseUser):
     def __unicode__(self):
         return "%s" % (self.phone)
 
-    def toJSON(self):
+    def to_json(self):
         result = {}
         result["phone"] = str(self.phone)
         result["name"] = self.name

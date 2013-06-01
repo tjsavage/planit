@@ -25,11 +25,13 @@ class Meeting(models.Model):
     range_end = models.DateTimeField()
     creator = models.ForeignKey(UserProfile, related_name="creator")
     users = models.ManyToManyField(UserProfile, related_name="users")
+    set_time = models.DateTimeField(null=True, blank=True)
     duration = models.IntegerField()
 
     def to_json(self):
         return { 'pk': '%s' % self.pk,
-                'name': '%s' % self.name}
+                'name': '%s' % self.name,
+                'suggestedTimes': [s.to_json() for s in SuggestedTime.objects.filter(meeting=self)]}
 
 class SuggestedTime(models.Model):
     meeting = models.ForeignKey('Meeting')
@@ -37,6 +39,14 @@ class SuggestedTime(models.Model):
     accepted = models.ManyToManyField(UserProfile, related_name="accepted")
     declined = models.ManyToManyField(UserProfile, related_name="declined")
 
+    def to_json(self):
+        return {'pk': '%s' % self.pk,
+                'date': '%s' % self.datetime.strftime(settings.DATE_FORMAT),
+                'time': '%s' % self.datetime.strftime(settings.TIME_FORMAT),
+                'start': '%s' % self.datetime.strftime(settings.TIME_FORMAT),
+                'end': '%s' % (self.datetime + timedelta(minutes=self.meeting.duration)).strftime(settings.TIME_FORMAT),
+                'accepted': [u.to_json() for u in self.accepted.all()],
+                'declined': [u.to_json() for u in self.declined.all()]}
 
 def create_schedule(user, default_busy=None):
     for day in settings.DAYS:

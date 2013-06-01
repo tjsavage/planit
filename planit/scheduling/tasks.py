@@ -1,6 +1,6 @@
 from datetime import time, datetime, timedelta
 
-from planit.scheduling.models import ScheduleBlock
+from planit.scheduling.models import ScheduleBlock, SuggestedTime, Meeting
 from planit.util.time import increment_time
 
 def is_available(user, start, duration):
@@ -44,3 +44,10 @@ def best_starts(users, range_start, range_end, duration):
 
     result = sorted(result, key=lambda t: len(t[1]), reverse=True)
     return result
+
+def generate_suggested_times(meeting):
+        starts = best_starts(meeting.users.all(), meeting.range_start, meeting.range_end, meeting.duration)
+        for start in starts[:10]:
+            SuggestedTime.objects.create(meeting=meeting,
+                                        datetime=start[0])
+        return True

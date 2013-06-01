@@ -12,9 +12,9 @@ def send_verification(user, verification_token):
         
         logger.debug(body)
         logger.debug(settings.TWILIO_PHONE_NUMBER)
-        message = client.sms.messages.create(to=str(user.phone),
-                                            from_=settings.TWILIO_PHONE_NUMBER,
-                                            body=str(body))
+        #message = client.sms.messages.create(to=str(user.phone),
+        #                                    from_=settings.TWILIO_PHONE_NUMBER,
+        #                                    body=str(body))
         return True
     except:
         return False
@@ -23,8 +23,8 @@ def send_message(phone, message):
     try:
         client = TwilioRestClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
         logger.debug("Body: %s" % message)
-        message = client.sms.messages.create(to=str(phone),
-                                        from_=settings.TWILIO_PHONE_NUMBER,
-                                        body=str(message))
+        #message = client.sms.messages.create(to=str(phone),
+        #                                from_=settings.TWILIO_PHONE_NUMBER,
+        #                                body=str(message))
     except:
         return False
