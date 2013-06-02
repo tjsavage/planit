@@ -81,7 +81,19 @@ def meeting(request, meeting_id):
 def meeting_availabilities(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=int(meeting_id))
 
-    return HttpResponse(simplejson.dumps(meeting.to_json()["suggestedTimes"]))
+    suggested_times = SuggestedTime.objects.filter(meeting=meeting)
+    
+    suggested_times_with_status = []
+    for s in suggested_times:
+        d = s.to_json()
+        if request.user in s.accepted.all():
+            d["status"] = "accepted"
+        elif request.user in s.declined.all():
+            d["status"] = "declined"
+        else:
+            d["status"] = ""
+        suggested_times_with_status.append(d)
+    return HttpResponse(simplejson.dumps(suggested_times_with_status))
 
 @login_required
 def meeting_availability(request, meeting_id, suggested_time_id):
@@ -106,11 +118,17 @@ def meeting_availability(request, meeting_id, suggested_time_id):
             suggested_time.accepted.remove(request.user)
     elif request.method == 'GET':
         if request.user in suggested_time.declined.all():
-            return HttpResponse('{"status":"declined"}');
+            resp = suggested_time.to_json();
+            resp["status"] = "declined"
+            return HttpResponse(simplejson.dumps(resp));
         elif request.user in suggested_time.accepted.all():
-            return HttpResponse('{"status":"accepted"}');
+            resp = suggested_time.to_json();
+            resp["status"] = "accepted";
+            return HttpResponse(simplejson.dumps(resp));
         else:
-            return HttpResponse('{"status":""}');
+            resp = suggested_time.to_json();
+            resp["status"] = "";
+            return HttpResponse(simplejson.dumps(resp));
 
     suggested_time.save()
     return HttpResponse("200")
