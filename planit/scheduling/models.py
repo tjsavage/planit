@@ -46,7 +46,8 @@ class SuggestedTime(models.Model):
                 'start': '%s' % self.datetime.strftime(settings.TIME_FORMAT),
                 'end': '%s' % (self.datetime + timedelta(minutes=self.meeting.duration)).strftime(settings.TIME_FORMAT),
                 'accepted': [u.to_json() for u in self.accepted.all()],
-                'declined': [u.to_json() for u in self.declined.all()]}
+                'declined': [u.to_json() for u in self.declined.all()],
+                'invitees': [u.to_json() for u in self.meeting.users.all()]}
 
 def create_schedule(user, default_busy=None):
     for day in settings.DAYS:

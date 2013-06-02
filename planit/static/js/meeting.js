@@ -147,6 +147,42 @@ Meeting.SuggestedTimeView =  Backbone.View.extend({
     }
 });
 
+Meeting.StatusView = Backbone.View.extend({
+    initialize: function() {
+        this.on("clicked", this.toggleInfo, this);
+        //this.model.on("change", this.render, this);
+    },
+
+    render: function() {
+        var template = _.template( $("#block-template-status").html());
+        this.$el.addClass("status-block");
+        var percentAttending = this.model.get("accepted").length / (this.model.get("invitees").length);
+
+        var R = Math.floor(Math.max(90 * (1 - percentAttending), 0));
+        var G = Math.floor(Math.max(255 * (1 - percentAttending), 191));
+        var B = Math.floor(Math.max(155 * (1 - percentAttending), 64));
+        console.log("RGB: " + R + ", " + G + ", " + B);
+        this.$el.css("background-color", "rgb(" + R + "," + G + "," + B + ")");
+        this.$el.html(template(this.model.toJSON()));
+
+        var T = this;
+        this.$el.click(function() {
+            T.trigger("clicked");
+        });
+
+        return this;
+    },
+
+    toggleInfo: function() {
+        if (this.$el.find(".info-drawer").is(":hidden")) {
+            this.$el.find(".info-drawer").slideDown();
+        } else {
+            this.$el.find(".info-drawer").slideUp();
+        }
+        
+    }
+});
+
 Meeting.SuggestedTimeListView = Backbone.View.extend({
     initialize: function() {
         this.model.on("add", this.added, this);
@@ -157,6 +193,25 @@ Meeting.SuggestedTimeListView = Backbone.View.extend({
         var type = this.model.indexOf(suggestedTime) % 2 ? "even" : "odd";
         this.$el.append(view.render(type).el);
         view.trigger("makeSlider");
+    },
+
+    toggleShow: function() {
+        this.$el.toggle();
+    }
+});
+
+Meeting.StatusListView = Backbone.View.extend({
+    initialize: function() {
+        this.model.on("add", this.added, this);
+    },
+
+    added: function(suggestedTime) {
+        var view = new Meeting.StatusView({model: suggestedTime});
+        this.$el.append(view.render().el);
+    },
+
+    toggleShow: function() {
+        this.$el.toggle();
     }
 });
 
@@ -165,8 +220,13 @@ $(function() {
     setupAjaxCsrf();
     var meeting = new Meeting.Meeting({id: $("#meeting-id").html() });
     var timeList = new Meeting.SuggestedTimeListView({model: meeting.suggestedTimeList, el: $("#suggested-time-list")});
+    var statusList = new Meeting.StatusListView({model: meeting.suggestedTimeList, el: $("#status-list")});
     $("#save-button").click(function() {
         meeting.trigger("save");
         return false;
+    });
+    $("#switch-view-button").click(function() {
+        timeList.toggleShow();
+        statusList.toggleShow();
     });
 });

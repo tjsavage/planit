@@ -49,16 +49,39 @@
                 <div class = 'block-slide block-slide-busy even busy'><h5>BUSY</h5></div>                  
             </div>
         </script>
+        <script type="text/template" id="block-template-status">
+            <div class = 'block-slider'>
+                <div class = 'block-slide'><h5><%= date %>, <%= start %> -  <%= end %></h5>
+                    <div class="info-drawer row" style="display: none;">
+                        <div class="span6">
+                            <h6>Available</h6>
+                            <% _.each(accepted, function(u) { %>
+                                <p> <%= u.name %> </p>
+                            <% }); %>
+                        </div>
+                        <div class="span6">
+                            <h6>Unavailable</h6>
+                            <% _.each(declined, function(u) { %>
+                                <p> <%= u.name %> </p>
+                            <% }); %>
+                        </div>
+                    </div>
+                </div>              
+            </div>
+        </script>
         <div style="display:none;" id="meeting-id">{{ meeting.pk }}</div>
         <div id="container">
             <div id="meeting-suggestions-container">
                 
                 <div id="meeting-suggestions">
                     <span>
-                        <h1>{{ meeting.name }}<a style="float: right; margin-right: 20px" class="btn btn-large" id="save-button">Save</a></h1>
+                        <h1><a style="float:left; margin-left:20px" class="btn btn-info btn-large" id="switch-view-button">Status</a>{{ meeting.name }}<a style="float: right; margin-right: 20px" class="btn btn-large" id="save-button">Save</a></h1>
                     </span>
                     <div id="suggested-time-list"></div>
+                    <div id="status-list" style="display:none">
                 </div>
+            </div>
+            
             </div>
         </div>    
     </body>
