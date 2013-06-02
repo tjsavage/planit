@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'planit.views.home', name='home'),
+    url(r'^$', 'planit.scheduling.views.home', name='home'),
     url(r'^accounts/', include('planit.accounts.urls')),
     url(r'^t/$', 'planit.accounts.views.token_login'),
     url(r'^v/$', 'planit.accounts.views.verify'),

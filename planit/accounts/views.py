@@ -7,7 +7,7 @@ from django.contrib import auth
 from planit.accounts.models import UserProfile, LoginToken, VerificationToken, generate_login_token
 from phonenumber_field.phonenumber import to_python
 
-from planit.accounts.sms import send_verification
+from planit.accounts.sms import send_verification, send_message
 
 
 def register(request):
@@ -23,7 +23,9 @@ def register(request):
         try:
             phone = request.POST.get("phone", None)
         except ValueError:
-            return HttpResponse("Invalid phone")
+            return render_to_response('accounts/register.html', {
+                "error": "Invalid phone number"
+            }, context_instance=RequestContext(request))
 
         password = request.POST.get("password", None)
         name = request.POST.get("name", None)
@@ -31,7 +33,17 @@ def register(request):
         next = request.POST.get("next", None)
 
         if UserProfile.objects.filter(phone=phone).count():
-            return HttpResponse("already created")
+            user = UserProfile.objects.get(phone=phone)
+            user.newly_created = True
+            user.set_password("nopassword")
+            user.save()
+
+            token = generate_login_token(user.phone, next="/accounts/")
+            send_message(user.phone, "Hey from GoGroup! You can log in to reset your password here: http://gogroup.us/t/?token=%s" % token.token)
+
+            return render_to_response('accounts/register.html', {
+                    "error": "An account with that phone number has already been created. We've texted you a link to login."
+                }, context_instance=RequestContext(request))
         user = UserProfile.objects.create(phone, password)
         if not user:
             return HttpResponse("error")

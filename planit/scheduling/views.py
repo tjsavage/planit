@@ -14,7 +14,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 def home(request):
-    pass
+    return render_to_response("home.html", {},
+        context_instance=RequestContext(request))
 
 @login_required
 def schedule(request):

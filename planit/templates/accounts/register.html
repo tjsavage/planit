@@ -27,6 +27,9 @@
             <div>
                 <h2 style="padding-left: 10px; text-align: left;color:#2980B9">Sign-up</h2>
             </div>
+            {% if error %}
+                <div class="error">{{ error }}</div>
+            {% endif %}
             <form method="post">
                 {% csrf_token %}
                 <div>
