@@ -7,6 +7,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('planit.scheduling.views',
     # Examples:
     url(r'^$', 'schedule'),
+    url(r'meeting/$', 'meetings'),
     url(r'meeting/create/$', 'create_meeting'),
     url(r'meeting/(?P<meeting_id>\d+)/', 'meeting'),
 

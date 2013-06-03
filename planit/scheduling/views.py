@@ -25,6 +25,17 @@ def schedule(request):
         context_instance=RequestContext(request))
 
 @login_required
+def meetings(request):
+    user = request.user
+    meetings = []
+    for meeting in Meeting.objects.filter(range_end__gte=datetime.datetime.today()):
+        if user in meeting.users.all():
+            meetings.append(meeting)
+
+    return render_to_response("scheduling/meetings.html", {"meetings": meetings},
+        context_instance=RequestContext(request))
+
+@login_required
 def meeting(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=int(meeting_id))
 
