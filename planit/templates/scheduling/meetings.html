@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>GoGroup | Meetings made easy.</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Loading Bootstrap -->
+        <link href="/static/css/bootstrap-combined.min.css" rel="stylesheet">
+
+        <!-- Loading Flat UI -->
+        <link href="/static/flat-ui-master/css/flat-ui.css" rel="stylesheet">
+        <link rel="shortcut icon" href="../images/favicon.ico">
+
+        <!-- Stylesheets -->
+        <link href="/static/css/dashboard.css" rel="stylesheet">
+    <body>
+        {% include "nav.html" %}
+        {% for meeting in meetings %}
+        <div class="row" id="dashboard">
+            <a href="/scheduling/meeting/{{ meeting.pk }}/"type="button" class="btn btn-large btn-primary btn-block">
+                <div id="new-group">
+                    <span class="fui-calendar-16"></span>
+                    <h3>{{ meeting.name }}</h3>
+                    <p>{% for user in meeting.users.all %}{{ user.name }}{% if not forloop.last %},{% endif %} {% endfor %}</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </body>
+</html>
