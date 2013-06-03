@@ -3,7 +3,7 @@
         <div class="container">
             <ul class="nav">
                 <li>
-                    <a href="desktop-home.html">
+                    <a href="/">
                         <span class="fui-bubble-16"></span> &nbsp;
                         GoGroup
                     </a>
@@ -11,9 +11,15 @@
             </ul>
             <ul class="nav pull-right">
             <li>
-                <a href="#">
-                    Login &nbsp; <span class="fui-man-24"></span>
-                </a>
+                {% if not request.user %}
+                    <a href="/accounts/login/">
+                        Login &nbsp; <span class="fui-man-24"></span>
+                    </a>
+                {% else %}
+                    <a href="/accounts/">
+                        My Account &nbsp; <span class="fui-man-24"></span>
+                    </a>
+                {% endif %}
             </li>
         </ul>
     </div>

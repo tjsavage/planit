@@ -1,6 +1,53 @@
-<form method="post">
-    {% csrf_token %}
-    Phone: <input type="text" name="phone" /> <br/>
-    Password: <input type="text" name="password" /> <br />
-    <input type="submit" value="submit" />
-</form>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>GoGroup | Meetings made easy.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="/static/flat-ui-master/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="/static/flat-ui-master/css/flat-ui.css" rel="stylesheet">
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+    <!-- Stylesheets -->
+    <link href="/static/css/index.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div id="container" class="span12">
+        {% include "nav.html" %}
+        <div id="registration-form" class="span4">
+            <div>
+                <h2 style="padding-left: 10px; text-align: left;color:#2980B9">Log In &nbsp;<small><a href="/accounts/register/">Register</a></small></h2><br />
+            </div>
+            {% if error %}
+                <div class="alert alert-error">{{ error }}</div><br />
+            {% endif %}
+            <form method="post" class="create-form">
+                {% csrf_token %}
+                <div>
+                    <input type="text" name="phone" placeholder="Phone" /> <br/>
+                    <input type="password" name="password" placeholder="Password" /> <br />
+                </div>
+                <hr>
+                <div>
+                    <input type="submit" value="Log In" class="btn btn-large btn-primary btn-block" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--[if lt IE 8]>
+      <script src="js/icon-font-ie7.js"></script>
+      <script src="js/icon-font-ie7-24.js"></script>
+    <![endif]-->
+</body>
+</html>

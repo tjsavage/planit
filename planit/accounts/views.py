@@ -28,6 +28,13 @@ def register(request):
             }, context_instance=RequestContext(request))
 
         password = request.POST.get("password", None)
+        password2 = request.POST.get("password2", None)
+
+        if password != password2:
+            return render_to_response('accounts/register.html', {
+                "error": "Passwords don't match"
+            }, context_instance=RequestContext(request))
+            
         name = request.POST.get("name", None)
         email = request.POST.get("email", None)
         next = request.POST.get("next", None)
@@ -74,7 +81,9 @@ def login(request):
                 auth.login(request, user)
                 return HttpResponseRedirect('/accounts/')
         else:
-            return HttpResponse("invalid login")
+            return render_to_response("accounts/login.html", 
+                {"error": "Sorry, incorrect phone number or password"},
+            context_instance=RequestContext(request))
 
     else:
         return render_to_response("accounts/login.html", {},
