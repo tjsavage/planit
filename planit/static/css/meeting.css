@@ -2,6 +2,24 @@
     overflow: scroll;
 }
 
+#meeting-tabs {
+    margin-bottom: 0px;
+    width: 100%;
+    display: table;
+}
+
+#meeting-tabs li {
+    display: table-cell;
+    text-align: center;
+    white-space: nowrap;
+}
+
+#meeting-tabs a {
+    display: block;
+    text-decoration: none
+}
+
+
 .block-slider .block-slide-free.even.free {
     background-color: #27AE60;
 /*  -webkit-box-shadow:inset 0px 0px 0px 3px #2ECC71;
@@ -28,8 +46,8 @@
     padding-top: 5px;
 }
 
-.block-slider {
-
+.block-slider h5 {
+    text-transform: none;
 }
 
 .block-slider .caret {

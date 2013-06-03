@@ -28,6 +28,7 @@
         <script src="/static/js/ajaxSetup.js"></script>
         <!-- iosSlider plugin -->
         <script src = "/static/js/jquery.iosslider.min.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
         <script src="/static/js/underscore.min.js"></script>
         <script src="/static/js/backbone.min.js"></script>
         <script src="/static/js/meeting.js"></script>
@@ -75,9 +76,18 @@
                 
                 <div id="meeting-suggestions">
                     <span>
-                        <h1><a style="float:left; margin-left:20px" class="btn btn-info btn-large" id="switch-view-button">Status</a>{{ meeting.name }}<a style="float: right; margin-right: 20px" class="btn btn-large" id="save-button">Save</a></h1>
+                        <h1>{{ meeting.name }}</h1>
                     </span>
-                    <div id="suggested-time-list"></div>
+                    <ul class="nav nav-tabs" id="meeting-tabs">
+                        <li class="active">
+                            <a href="#" id="availability-tab-button">Times</a>
+                        </li>
+                        <li>
+                            <a href="#" id="status-tab-button">Status</a>
+                        </li>
+                    </ul>
+                    <div id="suggested-time-list">
+                    </div>
                     <div id="status-list" style="display:none">
                 </div>
             </div>

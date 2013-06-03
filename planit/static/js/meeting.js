@@ -180,6 +180,7 @@ Meeting.StatusView = Backbone.View.extend({
         this.$el.html(template(this.model.toJSON()));
 
         var T = this;
+        this.$el.unbind("click");
         this.$el.click(function() {
             T.trigger("clicked");
             return false;
@@ -189,13 +190,13 @@ Meeting.StatusView = Backbone.View.extend({
     },
 
     toggleInfo: function() {
-        console.log("clicked");
+
         if (this.$el.find(".info-drawer").is(":hidden")) {
             this.$el.find(".info-drawer").slideDown();
         } else {
             this.$el.find(".info-drawer").slideUp();
         }
-        
+        return false;
     }
 });
 
@@ -213,6 +214,14 @@ Meeting.SuggestedTimeListView = Backbone.View.extend({
 
     toggleShow: function() {
         this.$el.toggle();
+    },
+
+    show: function() {
+        this.$el.show();
+    },
+
+    hide: function() {
+        this.$el.hide();
     }
 });
 
@@ -228,6 +237,14 @@ Meeting.StatusListView = Backbone.View.extend({
 
     toggleShow: function() {
         this.$el.toggle();
+    },
+
+    show: function() {
+        this.$el.show();
+    },
+
+    hide: function() {
+        this.$el.hide();
     }
 });
 
@@ -241,8 +258,18 @@ $(function() {
         meeting.trigger("save");
         return false;
     });
-    $("#switch-view-button").click(function() {
-        timeList.toggleShow();
-        statusList.toggleShow();
+    $("#meeting-tabs a").click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+    $("#availability-tab-button").click(function() {
+        statusList.hide();
+        timeList.show();
+        return false;
+    });
+    $("#status-tab-button").click(function() {
+        timeList.hide();
+        statusList.show();
+        return false;
     });
 });
