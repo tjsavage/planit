@@ -21,31 +21,32 @@
         <![endif]-->
     <body>
         {% include "nav.html" %}
-        <div class="span12" id="dashboard">
-            <div class="test">
-                <a href="/scheduling/meeting/create/"type="button" class="span4 dashboard-tile btn btn-large btn-primary">
-                    <div id="new-group">
-                        <span class="fui-new-24"></span>
-                        <h3>Create a new group</h3>
-                        <p>Find a time to meet with a new group of friends, family, coworkers, or strangers!</p>
-                    </div>
-                </a>
-                <a href="/scheduling/meeting/" type="button" class="span4 dashboard-tile btn btn-large btn-primary">
-                    <div id="new-group">
-                        <span class="fui-menu-24"></span>
-                        <h3>View existing groups</h3>
-                        <p>Your entire history of organizational escapades in one place!</p>
-                    </div>
-                </a>
-                <button href="#"type="button" class="span4 dashboard-tile btn btn-large btn-primary">
-                    <div id="new-group">
-                        <span class="fui-settings-24"></span>
-                        <h3>Account Details</h3>
-                        <p>Edit your weekly availability, along with the standard password/email mumbo-jumbo.</p>
-                    </div>
-                </button>
-            </div>
-        
+        <div class="row" id="dashboard">
+            <a href="/scheduling/meeting/create/"type="button" class="btn btn-large btn-primary btn-block">
+                <div id="new-group">
+                    <span class="fui-new-24"></span>
+                    <h3>Create a new group</h3>
+                    <p>Find a time to meet with a new group of friends, family, coworkers, or strangers!</p>
+                </div>
+            </a>
+        </div>
+        <div class="row">
+            <a href="/scheduling/meeting/" type="button" class="btn btn-large btn-primary btn-block">
+                <div id="new-group">
+                    <span class="fui-menu-24"></span>
+                    <h3>View existing groups</h3>
+                    <p>Your entire history of organizational escapades in one place!</p>
+                </div>
+            </a>
+        </div>
+        <div class="row">
+            <a href="#" type="button" class="btn btn-large btn-primary btn-block">
+                <div id="new-group">
+                    <span class="fui-settings-24"></span>
+                    <h3>Account Details</h3>
+                    <p>Edit your weekly availability, along with the standard password/email mumbo-jumbo.</p>
+                </div>
+            </a>        
         </div>
     </body>
 </html>

@@ -26,11 +26,18 @@ h3 {
 	float: none;
 }
 
-.test {
+.row a {
 	margin-left: auto;
 	margin-right: auto;
 	padding: 0px;
 	max-width: 400px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.row a p {
+    font-size: 13px;
+    padding: 10px;
 }
 
 .span4 {
