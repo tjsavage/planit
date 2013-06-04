@@ -23,45 +23,43 @@
 </head>
 <body>
     {% include "nav.html" %}
-    <div class="row">
-            <!-- <div class="img-wrap">
-            <img style="margin-top:2px"src="http://i.imgur.com/8XkQH2j.jpg" >
-            </div> -->
-            <div id="splash-info" class="span6">
-                    <h1 style="color:#2980B9">Meetings made easy.</h1>
-                    <p>GoGroup helps you quickly and easily find the best time to meet with friends, family, coworkers and Eewoks. Sound too good to be true? See for yourself.</p>
-                    <hr>
-                    <form method="post" action="/accounts/register/">
-                        {% csrf_token %}
-                        <div style="text-align:center">
-                            <input type="text" value name="name" placeholder="Full Name">
-                            <input type="text" class="bfh-phone" data-format="+1 (ddd) ddd-dddd" name="phone" value placeholder="Cell Number">
-                            <input type="password" value placeholder="Password">
-                            <input type="password" value placeholder="Confirm Password">
-                        </div>
+    <div class="container">
+        <div class="row row-fluid">
+            <div class="span12">
+                <div class="row-fluid">
+                    <div id="splash-info" class="span8">
+                        <h1 style="color:#2980B9">Meetings made easy.</h1>
+                        <p>GoGroup helps you quickly and easily find the best time to meet with friends, family, coworkers and Eewoks. Sound too good to be true? See for yourself.</p>
                         <hr>
+                            <div class="row-fluid">
+                                <form method="post" action="/accounts/register/">
+                                {% csrf_token %}
+                            
+                                <div class="span12">
+                                    <input type="text" value name="name" placeholder="Full Name">
+                                    <input type="text" class="bfh-phone" data-format="+1 (ddd) ddd-dddd" name="phone" value placeholder="Cell Number">
+                                </div>
+                                <div class="span12">
+                                    <input type="password" value placeholder="Password">
+                                    <input type="password" value placeholder="Confirm Password">
+                                </div>
+                            </div>
+                            <hr>
+                            <div>
+                                <p id="terms">By clicking "Register", I agree to GoGroup's <a href="#">Terms & Conditions</a>. Standard text messaging rates apply.</p>
+                                <input type="submit" href="#" id="register-button" value="Register" class="pull-right btn btn-primary btn-large" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="span4" id="splash-desc">
                         <div>
-                            <p id="terms">By clicking "Register", I agree to GoGroup's <a href="#">Terms & Conditions</a>. Standard text messaging rates apply.</p>
-                            <input type="submit" href="#" id="register-button" value="Register" class="pull-right btn btn-primary btn-large" />
+                            <img src="/static/img/gogroup-iphone.png" id="iphone-image" class="" type="image/png">
                         </div>
-                    </form>
-            </div>
-            <div class="span5" id="splash-desc">
-                <!-- <div>
-                    <img src="images/text-message.svg" class="" type="image/svg+xml">
-                    <p class="pull-right text-desc">Tired of pasting those links into emails? Texts make planning better for all involved.</p>
-                </div>
-                <div>
-                    <p class="pull-right quote"><i>"Wow, GoGroup is completely useless."</i><br>
-                        -- Said no one, ever.
-                    </p>
-                </div> -->
-                <div>
-                    <img src="../static/img/gogroup-iphone.png" id="iphone-image" class="" type="image/png">
+                    </div>
                 </div>
             </div>
-          </div>
         </div>
+    </div>
 </body>
 <div class="span12" id="footer">
     <p>Copyright &copy;  2013 Joel Aguero, Tania Anaissie, Cooper Dawson, and Taylor Savage. All rights reserved. &nbsp;&nbsp; | &nbsp;&nbsp;<a href="mailto:hello@gogroup.us">hello@gogroup.us</a>

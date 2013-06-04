@@ -4,6 +4,7 @@ from django.conf import settings
 
 from planit.scheduling.models import ScheduleBlock, SuggestedTime, Meeting
 from planit.util.time import increment_time
+from planit.accounts.sms import send_message
 
 def is_available(user, start, duration):
     if start.minute != 0 and start.minute != 30:
@@ -56,3 +57,7 @@ def generate_suggested_times(meeting):
             SuggestedTime.objects.create(meeting=meeting,
                                         datetime=start[0])
         return True
+
+def send_out_set_time(meeting):
+    for user in meeting.users.all():
+        send_message(user.phone, "Hello from GoGroup! Your meeting %s has been set for %s" % (meeting.name, meeting.set_time.formatted()))

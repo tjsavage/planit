@@ -38,33 +38,41 @@
     </head>
     
     <body>
+        {% include "nav.html" %}
         <script type="text/template" id="block-template-odd">
             <div class = 'block-slider block-slider-full'>
-                <div class = 'block-slide block-slide-free odd free'><h5><%= date %>, <%= start %> -  <%= end %></h5></div>
+                <div class = 'block-slide block-slide-free odd free'><h5><%= date %>, <%= start %>-<%= end %></h5></div>
                 <div class = 'block-slide block-slide-busy odd busy'><h5>BUSY</h5></div>                  
             </div>
         </script>
         <script type="text/template" id="block-template-even">
             <div class = 'block-slider'>
-                <div class = 'block-slide block-slide-free even free'><h5><%= date %>, <%= start %> -  <%= end %></h5></div>
+                <div class = 'block-slide block-slide-free even free'><h5><%= date %>, <%= start %>-<%= end %></h5></div>
                 <div class = 'block-slide block-slide-busy even busy'><h5>BUSY</h5></div>                  
             </div>
         </script>
         <script type="text/template" id="block-template-status">
             <div class = 'block-slider'>
                 <div class = 'block-slide'><h5><%= date %>, <%= start %> -  <%= end %></h5>
-                    <div class="info-drawer row" style="display: none;">
-                        <div class="span6">
-                            <h6>Available</h6>
-                            <% _.each(accepted, function(u) { %>
-                                <p> <%= u.name %> </p>
-                            <% }); %>
+                    <div class="info-drawer" style="display: none;">
+                        <div class="row">
+                            <div class="span12">
+                                <a href="#" class="btn btn-info set-meeting-button">Set as meeting time</a>
+                            </div>
                         </div>
-                        <div class="span6">
-                            <h6>Unavailable</h6>
-                            <% _.each(declined, function(u) { %>
-                                <p> <%= u.name %> </p>
-                            <% }); %>
+                        <div class="row">
+                            <div class="span6">
+                                <h6>Available</h6>
+                                <% _.each(accepted, function(u) { %>
+                                    <p> <%= u.name %> </p>
+                                <% }); %>
+                            </div>
+                            <div class="span6">
+                                <h6>Unavailable</h6>
+                                <% _.each(declined, function(u) { %>
+                                    <p> <%= u.name %> </p>
+                                <% }); %>
+                            </div>
                         </div>
                     </div>
                 </div>              

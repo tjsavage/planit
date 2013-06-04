@@ -34,7 +34,8 @@ Meeting.Meeting = Backbone.Model.extend({
 Meeting.SuggestedTime = Backbone.Model.extend({
     initialize: function() {
         this.on("set:declined", this.declined, this);
-        this.on("set:accepted", this.accepted, this)
+        this.on("set:accepted", this.accepted, this);
+        this.on("setAsMeeting", this.setAsMeeting, this);
     },
 
     update: function() {
@@ -66,6 +67,17 @@ Meeting.SuggestedTime = Backbone.Model.extend({
     accepted: function() {
         this.set("status", "accepted");
         this.update();
+    },
+
+    setAsMeeting: function() {
+        var T = this;
+        $.ajax({
+            type: 'POST',
+            url: this.url() + "set/",
+            sucess: function() {
+                T.fetch();
+            }
+        });
     },
 
     url: function() {
@@ -184,6 +196,12 @@ Meeting.StatusView = Backbone.View.extend({
         this.$el.click(function() {
             T.trigger("clicked");
             return false;
+        });
+
+        var $meetingButton = this.$el.find(".set-meeting-button");
+        $meetingButton.unbind("click");
+        $meetingButton.click(function() {
+            T.model.trigger("setAsMeeting");
         });
 
         return this;

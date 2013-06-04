@@ -133,7 +133,29 @@ def meeting_availability(request, meeting_id, suggested_time_id):
     suggested_time.save()
     return HttpResponse("200")
 
+@login_required
+def set_meeting(request, meeting_id, suggested_time_id):
+    meeting = get_object_or_404(Meeting, pk=int(meeting_id))
+    suggested_time = get_object_or_404(SuggestedTime, pk=int(suggested_time_id))
 
+    if not request.user in meeting.users.all():
+        return HttpResponse("You don't belong here")
+
+    if suggested_time.meeting != meeting:
+        return HttpResponse("Your meeting and time don't match")
+
+    if request.method == 'POST':
+        suggested_time.set_as_time = True
+        suggested_time.save()
+        if meeting.set_time:
+            meeting.set_time.set_as_time = False
+            meeting.set_time.save()
+        meeting.set_time = suggested_time
+        meeting.save()
+        tasks.send_out_set_time(meeting)
+        return HttpResponse(status=200)
+
+    return HttpResponse("No GET here")
 
 def sorted_by_day(blocks):
     return sorted(blocks, key=lambda b: settings.DAYS.index(b["day"]))
