@@ -59,5 +59,8 @@ PersonList.PersonListView = Backbone.View.extend({
             phone: this.personPhoneField.val()
         });
         this.model.add(newPerson);
+
+        this.personNameField.val("");
+        this.personPhoneField.val("");
     }
 });

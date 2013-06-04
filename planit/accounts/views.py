@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
+from django.conf import settings
 
 from planit.accounts.models import UserProfile, LoginToken, VerificationToken, generate_login_token
 from phonenumber_field.phonenumber import to_python
@@ -46,7 +47,7 @@ def register(request):
             user.save()
 
             token = generate_login_token(user.phone, next="/accounts/")
-            send_message(user.phone, "Hey from GoGroup! You can log in to reset your password here: http://gogroup.us/t/?token=%s" % token.token)
+            send_message(user.phone, "Hey from GoGroup! You can log in to reset your password here: http://%s/t/?token=%s" % (settings.BASE_URL, token.token))
 
             return render_to_response('accounts/register.html', {
                     "error": "An account with that phone number has already been created. We've texted you a link to login."
@@ -119,7 +120,9 @@ def token_login(request):
 def newly_created(request):
     if request.method == 'POST':
         password = request.POST["password"]
+        name = request.POST["name"]
         user = request.user
+        user.name = name
         user.newly_created = False
         user.set_password(password)
         user.save()

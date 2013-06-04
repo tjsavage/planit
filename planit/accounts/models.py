@@ -96,7 +96,7 @@ def invite_user(user, invitor=None, next=None):
     token = generate_login_token(user.phone, next=next)
 
     if invitor:
-        body = "You were invited by %s to schedule a meeting. Schedule at http://gogroup.us/t/?token=%s" % (invitor.name, token.token)
+        body = "You were invited by %s to schedule a meeting. Schedule at http://%s/t/?token=%s" % (invitor.name, settings.BASE_URL, token.token)
     else:
         body = "You were invited to GoGroup! Get started at http://gogroup.us/t/?token=%s" % (token.token)
     send_message(user.phone, body)
@@ -105,9 +105,9 @@ def invite_to_meeting(user, meeting, invitor=None):
     token = generate_login_token(user.phone, next="/scheduling/meeting/%d/" % meeting.pk)
 
     if invitor:
-        body = "You were invited by %s to schedule a meeting. Schedule at http://gogroup.us/t/?token=%s" % (invitor.name, token.token)
+        body = "You were invited by %s to schedule a meeting. Schedule at http://%s/t/?token=%s" % (invitor.name, settings.BASE_URL, token.token)
     else:
-        body = "You were invited to schedule a meeting with goGroup! Get started at http://gogroup.us/t/?token=%s" % (token.token)
+        body = "You were invited to schedule a meeting with goGroup! Get started at http://%s/t/?token=%s" % (settings.BASE_URL, token.token)
     send_message(user.phone, body)
 
 

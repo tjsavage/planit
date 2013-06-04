@@ -173,13 +173,10 @@ Meeting.StatusView = Backbone.View.extend({
     },
 
     changed: function() {
-        console.log("Changed to ");
-        console.log(this.model.toJSON());
         this.render();
     },
 
     render: function() {
-        console.log(this.model.toJSON());
         var template = _.template( $("#block-template-status").html());
         this.$el.addClass("status-block");
         var percentAttending = this.model.get("accepted").length / (this.model.get("invitees").length);

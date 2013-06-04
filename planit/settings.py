@@ -11,6 +11,7 @@ DATE_FORMAT = '%A, %B %d, %Y'
 START_TIME = datetime.strptime("8:00AM", TIME_FORMAT)
 END_TIME = datetime.strptime("11:59PM", TIME_FORMAT)
 INTERVAL = timedelta(minutes=30)
+BASE_URL = "gogroupus.herokuapp.com"
 #(sic)
 
 #The actual twilio stuff
