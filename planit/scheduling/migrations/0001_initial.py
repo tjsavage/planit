@@ -32,13 +32,12 @@ class Migration(SchemaMigration):
         db.send_create_signal(u'scheduling', ['Meeting'])
 
         # Adding M2M table for field users on 'Meeting'
-        m2m_table_name = db.shorten_name(u'scheduling_meeting_users')
-        db.create_table(m2m_table_name, (
+        db.create_table(u'scheduling_meeting_users', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('meeting', models.ForeignKey(orm[u'scheduling.meeting'], null=False)),
             ('userprofile', models.ForeignKey(orm[u'accounts.userprofile'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['meeting_id', 'userprofile_id'])
+        db.create_unique(u'scheduling_meeting_users', ['meeting_id', 'userprofile_id'])
 
         # Adding model 'SuggestedTime'
         db.create_table(u'scheduling_suggestedtime', (
@@ -50,22 +49,20 @@ class Migration(SchemaMigration):
         db.send_create_signal(u'scheduling', ['SuggestedTime'])
 
         # Adding M2M table for field accepted on 'SuggestedTime'
-        m2m_table_name = db.shorten_name(u'scheduling_suggestedtime_accepted')
-        db.create_table(m2m_table_name, (
+        db.create_table(u'scheduling_suggestedtime_accepted', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('suggestedtime', models.ForeignKey(orm[u'scheduling.suggestedtime'], null=False)),
             ('userprofile', models.ForeignKey(orm[u'accounts.userprofile'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['suggestedtime_id', 'userprofile_id'])
+        db.create_unique(u'scheduling_suggestedtime_accepted', ['suggestedtime_id', 'userprofile_id'])
 
         # Adding M2M table for field declined on 'SuggestedTime'
-        m2m_table_name = db.shorten_name(u'scheduling_suggestedtime_declined')
-        db.create_table(m2m_table_name, (
+        db.create_table(u'scheduling_suggestedtime_declined', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('suggestedtime', models.ForeignKey(orm[u'scheduling.suggestedtime'], null=False)),
             ('userprofile', models.ForeignKey(orm[u'accounts.userprofile'], null=False))
         ))
-        db.create_unique(m2m_table_name, ['suggestedtime_id', 'userprofile_id'])
+        db.create_unique(u'scheduling_suggestedtime_declined', ['suggestedtime_id', 'userprofile_id'])
 
 
     def backwards(self, orm):
@@ -76,16 +73,16 @@ class Migration(SchemaMigration):
         db.delete_table(u'scheduling_meeting')
 
         # Removing M2M table for field users on 'Meeting'
-        db.delete_table(db.shorten_name(u'scheduling_meeting_users'))
+        db.delete_table('scheduling_meeting_users')
 
         # Deleting model 'SuggestedTime'
         db.delete_table(u'scheduling_suggestedtime')
 
         # Removing M2M table for field accepted on 'SuggestedTime'
-        db.delete_table(db.shorten_name(u'scheduling_suggestedtime_accepted'))
+        db.delete_table('scheduling_suggestedtime_accepted')
 
         # Removing M2M table for field declined on 'SuggestedTime'
-        db.delete_table(db.shorten_name(u'scheduling_suggestedtime_declined'))
+        db.delete_table('scheduling_suggestedtime_declined')
 
 
     models = {
