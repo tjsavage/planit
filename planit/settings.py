@@ -5,6 +5,7 @@ from datetime import time, datetime, timedelta
 AUTH_USER_MODEL = 'accounts.UserProfile'
 BASE_DIR = os.path.dirname(__file__)
 
+ALLOWED_HOSTS = ['gogroupus.herokuapp.com', 'localhost:8000', '127.0.0.1']
 PHONENUMER_DEFAULT_REGION = "US"
 TIME_FORMAT = '%I:%M%p'
 DATE_FORMAT = '%A, %B %d, %Y'
@@ -26,7 +27,7 @@ TWILIO_PHONE_NUMBER = "16503535255"
 
 DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
