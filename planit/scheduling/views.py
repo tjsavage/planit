@@ -51,8 +51,8 @@ def create_meeting(request):
         data = simplejson.loads(request.body)
 
         name = data["name"]
-        start = datetime.datetime.strptime(data["start"], "%m-%d-%Y")
-        end = datetime.datetime.strptime(data["end"], "%m-%d-%Y")
+        start = datetime.datetime.strptime(data["start"], "%Y-%m-%d")
+        end = datetime.datetime.strptime(data["end"], "%Y-%m-%d")
         duration = int(data["duration"])
 
         meeting = Meeting.objects.create(name=name, 
