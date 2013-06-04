@@ -51,19 +51,20 @@ def register(request):
             return render_to_response('accounts/register.html', {
                     "error": "An account with that phone number has already been created. We've texted you a link to login."
                 }, context_instance=RequestContext(request))
-        user = UserProfile.objects.create(phone, password)
+        user = UserProfile.objects.create(phone, password=password, name=name)
         if not user:
             return HttpResponse("error")
 
         user.name = name
         user.email = email
+        user.set_password(password)
 
         user.save()
+        #send_verification(user)
 
-        send_verification(user)
-
-        user = auth.authenticate(phone=user.phone, password=password)
-
+        #user = auth.authenticate(phone=user.phone, password=password)
+        
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
         auth.login(request, user)
         if next:
             return HttpResponseRedirect(next)
