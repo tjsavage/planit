@@ -60,7 +60,7 @@ def register(request):
 
         user.save()
 
-        #send_verification(user)
+        send_verification(user)
 
         user = auth.authenticate(phone=user.phone, password=password)
 
